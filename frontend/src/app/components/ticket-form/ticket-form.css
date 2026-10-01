@@ -1,0 +1,13 @@
+.ticket-form {
+  max-width: 640px;
+}
+
+.readonly {
+  padding: 0.45rem 0;
+  color: #4b5563;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}

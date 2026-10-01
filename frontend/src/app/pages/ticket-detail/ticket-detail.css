@@ -1,0 +1,50 @@
+.back {
+  margin: 0 0 1rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1.5rem;
+  margin: 0 0 1rem;
+}
+
+.details dt {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.details dd {
+  margin: 0;
+}
+
+h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.description {
+  margin: 0;
+  white-space: pre-wrap; /* keep the line breaks the user typed */
+}
+
+.status-panel {
+  margin-top: 1rem;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status-buttons .current {
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+  opacity: 1;
+}

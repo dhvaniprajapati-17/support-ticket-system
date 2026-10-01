@@ -1,0 +1,85 @@
+<form class="panel ticket-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  @let title = form.controls.title;
+  <div class="field">
+    <label for="title">Title</label>
+    <input id="title" type="text" formControlName="title" [class.invalid]="showErrors(title)" />
+    @if (showErrors(title)) {
+      <span class="field-error" data-testid="title-error">
+        @if (title.hasError('required')) {
+          Title is required.
+        } @else if (title.hasError('minlength') || title.hasError('maxlength')) {
+          Title must be {{ limits.titleMin }}–{{ limits.titleMax }} characters.
+        } @else if (title.hasError('server')) {
+          {{ title.getError('server') }}
+        }
+      </span>
+    }
+  </div>
+
+  @let description = form.controls.description;
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea id="description" rows="6" formControlName="description" [class.invalid]="showErrors(description)"></textarea>
+    <span class="field-hint">{{ description.value.length }} / {{ limits.descriptionMax }}</span>
+    @if (showErrors(description)) {
+      <span class="field-error" data-testid="description-error">
+        @if (description.hasError('required')) {
+          Description is required.
+        } @else if (description.hasError('maxlength')) {
+          Description must be at most {{ limits.descriptionMax }} characters.
+        } @else if (description.hasError('server')) {
+          {{ description.getError('server') }}
+        }
+      </span>
+    }
+  </div>
+
+  @let priority = form.controls.priority;
+  <div class="field">
+    <label for="priority">Priority</label>
+    <select id="priority" formControlName="priority" [class.invalid]="showErrors(priority)">
+      <option [ngValue]="null" disabled>Select a priority…</option>
+      @for (p of priorities; track p) {
+        <option [ngValue]="p">{{ p | enumLabel }}</option>
+      }
+    </select>
+    @if (showErrors(priority)) {
+      <span class="field-error" data-testid="priority-error">
+        @if (priority.hasError('required')) {
+          Priority is required.
+        } @else if (priority.hasError('server')) {
+          {{ priority.getError('server') }}
+        }
+      </span>
+    }
+  </div>
+
+  @let createdBy = form.controls.createdBy;
+  <div class="field">
+    <label for="createdBy">Created by</label>
+    @if (isEditMode) {
+      <!-- Read-only in edit mode: shown as text, never sent to the backend. -->
+      <span class="readonly" data-testid="created-by-readonly">{{ ticket()?.createdBy }}</span>
+    } @else {
+      <input id="createdBy" type="text" formControlName="createdBy" [class.invalid]="showErrors(createdBy)" />
+      @if (showErrors(createdBy)) {
+        <span class="field-error" data-testid="createdBy-error">
+          @if (createdBy.hasError('required')) {
+            Created by is required.
+          } @else if (createdBy.hasError('maxlength')) {
+            Created by must be at most {{ limits.createdByMax }} characters.
+          } @else if (createdBy.hasError('server')) {
+            {{ createdBy.getError('server') }}
+          }
+        </span>
+      }
+    }
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      {{ saving() ? 'Saving…' : submitLabel() }}
+    </button>
+    <a class="btn" [routerLink]="cancelLink()">Cancel</a>
+  </div>
+</form>

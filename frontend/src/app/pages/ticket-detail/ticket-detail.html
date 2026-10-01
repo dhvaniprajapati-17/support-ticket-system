@@ -1,0 +1,63 @@
+<p class="back"><a routerLink="/tickets">← Back to tickets</a></p>
+
+@if (loading()) {
+  <p class="message message-info">Loading ticket…</p>
+} @else if (notFound()) {
+  <div class="message message-error" role="alert" data-testid="not-found">
+    Ticket not found. It may have been deleted.
+    <a routerLink="/tickets">Back to tickets</a>
+  </div>
+} @else if (loadError()) {
+  <p class="message message-error" role="alert">{{ loadError() }}</p>
+} @else if (ticket(); as ticket) {
+  <div class="page-header">
+    <h2>#{{ ticket.id }} · {{ ticket.title }}</h2>
+    <div class="header-actions">
+      <a class="btn" [routerLink]="['/tickets', ticket.id, 'edit']">Edit</a>
+      <button type="button" class="btn btn-danger" (click)="deleteTicket()" [disabled]="busy()">Delete</button>
+    </div>
+  </div>
+
+  @if (actionError()) {
+    <p class="message message-error" role="alert">{{ actionError() }}</p>
+  }
+
+  <div class="panel">
+    <dl class="details">
+      <dt>Status</dt>
+      <dd><app-status-badge [status]="ticket.status" /></dd>
+
+      <dt>Priority</dt>
+      <dd><app-priority-badge [priority]="ticket.priority" /></dd>
+
+      <dt>Created by</dt>
+      <dd>{{ ticket.createdBy }}</dd>
+
+      <dt>Created at</dt>
+      <dd>{{ ticket.createdAt | date: 'medium' }}</dd>
+
+      <dt>Last updated</dt>
+      <dd data-testid="updated-at">{{ ticket.updatedAt | date: 'medium' }}</dd>
+    </dl>
+
+    <h3>Description</h3>
+    <p class="description">{{ ticket.description }}</p>
+  </div>
+
+  <div class="panel status-panel">
+    <h3>Change status</h3>
+    <div class="status-buttons">
+      @for (status of statuses; track status) {
+        <button
+          type="button"
+          class="btn"
+          [class.current]="status === ticket.status"
+          [disabled]="busy() || status === ticket.status"
+          (click)="changeStatus(status)"
+        >
+          {{ status | enumLabel }}
+        </button>
+      }
+    </div>
+  </div>
+}

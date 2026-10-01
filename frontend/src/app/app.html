@@ -1,0 +1,14 @@
+<header class="app-header">
+  <h1><a routerLink="/">Mini Support Ticket System</a></h1>
+
+  <nav>
+    <!-- routerLinkActive adds the "active" CSS class while the link's route is the current page. -->
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a routerLink="/tickets" routerLinkActive="active">Tickets</a>
+  </nav>
+</header>
+
+<main class="app-main">
+  <!-- The router renders the page component for the current URL here. -->
+  <router-outlet />
+</main>

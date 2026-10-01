@@ -1,0 +1,79 @@
+<div class="page-header">
+  <h2>Tickets</h2>
+  <a class="btn btn-primary" routerLink="/tickets/new">+ New Ticket</a>
+</div>
+
+<form class="filters" [formGroup]="filtersForm">
+  <div class="field filter-search">
+    <label for="search">Search</label>
+    <input id="search" type="search" formControlName="search" placeholder="Title or description…" />
+  </div>
+
+  <div class="field">
+    <label for="status">Status</label>
+    <select id="status" formControlName="status">
+      <option value="">All statuses</option>
+      @for (status of statuses; track status) {
+        <option [value]="status">{{ status | enumLabel }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="priority">Priority</label>
+    <select id="priority" formControlName="priority">
+      <option value="">All priorities</option>
+      @for (priority of priorities; track priority) {
+        <option [value]="priority">{{ priority | enumLabel }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="button" class="btn" (click)="clearFilters()" [disabled]="!hasActiveFilters()">Clear filters</button>
+</form>
+
+@if (error()) {
+  <p class="message message-error" role="alert">{{ error() }}</p>
+} @else if (loading()) {
+  <p class="message message-info">Loading tickets…</p>
+} @else if (tickets().length === 0) {
+  <p class="message message-info" data-testid="no-results">
+    @if (hasActiveFilters()) {
+      No tickets match your filters.
+      <button type="button" class="btn btn-sm" (click)="clearFilters()">Clear filters</button>
+    } @else {
+      No tickets yet. <a routerLink="/tickets/new">Create the first one</a>.
+    }
+  </p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Created by</th>
+        <th>Created at</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (ticket of tickets(); track ticket.id) {
+        <tr>
+          <td>#{{ ticket.id }}</td>
+          <td><a [routerLink]="['/tickets', ticket.id]">{{ ticket.title }}</a></td>
+          <td><app-priority-badge [priority]="ticket.priority" /></td>
+          <td><app-status-badge [status]="ticket.status" /></td>
+          <td>{{ ticket.createdBy }}</td>
+          <td class="nowrap">{{ ticket.createdAt | date: 'medium' }}</td>
+          <td class="actions">
+            <a class="btn btn-sm" [routerLink]="['/tickets', ticket.id]">View</a>
+            <a class="btn btn-sm" [routerLink]="['/tickets', ticket.id, 'edit']">Edit</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <p class="count">{{ tickets().length }} ticket(s)</p>
+}

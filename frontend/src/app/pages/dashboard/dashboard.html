@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h2>Dashboard</h2>
+  <a class="btn btn-primary" routerLink="/tickets/new">+ New Ticket</a>
+</div>
+
+@if (loading()) {
+  <p class="message message-info">Loading summary…</p>
+} @else if (error()) {
+  <p class="message message-error" role="alert">{{ error() }}</p>
+} @else if (summary(); as summary) {
+  <div class="cards">
+    <div class="card" data-testid="total">
+      <span class="card-label">Total tickets</span>
+      <span class="card-value">{{ summary.total }}</span>
+    </div>
+    <div class="card card-open" data-testid="open">
+      <span class="card-label">Open</span>
+      <span class="card-value">{{ summary.open }}</span>
+    </div>
+    <div class="card card-in-progress" data-testid="in-progress">
+      <span class="card-label">In Progress</span>
+      <span class="card-value">{{ summary.inProgress }}</span>
+    </div>
+    <div class="card card-resolved" data-testid="resolved">
+      <span class="card-label">Resolved</span>
+      <span class="card-value">{{ summary.resolved }}</span>
+    </div>
+  </div>
+
+  <p><a routerLink="/tickets">View all tickets →</a></p>
+}
